@@ -1,0 +1,64 @@
+﻿@model IEnumerable<ProductDisplayResponse>
+@{
+    ViewData["Title"] = "Home Page";
+    var count = 0;
+}
+
+<div class="text-center">
+    <h1 class="display-4">Hoşgeldiniz!</h1>
+    <p>Aradığınız ürünler burada!</p>
+</div>
+
+<div class="container">
+    <div class="row m-4">
+
+        @foreach (var productCard in Model)
+        {
+            if (count != 0 && count % 4 == 0)
+            {
+                @:</div>
+                @:<div class="row m-4">
+            }
+            <div class="col-3">
+               <partial name="_ProductCard" model="productCard"/>
+            </div>
+            count++;
+        }
+    </div>
+
+    <nav aria-label="...">
+        <ul class="pagination pagination-lg">
+            @for (int i =1 ; i <= ViewBag.TotalPage; i++)
+            {
+                 <li class="page-item"><a class="page-link" asp-action="Index" asp-route-pageNo="@i">@i</a></li>
+            }    
+            
+          
+        </ul>
+    </nav>
+
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('.basket').on('click', function () {
+
+                let id = $(this).data('id');
+                $.ajax({
+                    url: '/Shopping/AddToCard/' + id,
+                    type:'GET',
+                    success: function (data) {
+                        console.log(data);
+                        location = location;
+                    },
+                    error: function (err) {
+                        console.error(err);
+                    }
+                    
+                });
+            });
+        });
+    </script>
+}
+
